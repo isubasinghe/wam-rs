@@ -106,9 +106,32 @@ impl Machine {
 
     fn unify_variable() {}
 
-    fn unify_valeu() {}
+    fn unify_value() {}
 
+    fn deref(&mut self, addr: usize) -> usize {
+        let cell = self.cells[addr].clone();
+        match &*cell {
+            DataCellX::Var(_) => {},
+            DataCellX::StructIdx(_) => {},
+            DataCellX::StructDef(_, _) => {}
+        };
 
+        let mut addr = addr;
+
+        loop {
+            let cell = self.cells[addr].clone(); 
+            let var = match &*cell {
+                DataCellX::Var(var) => var,
+                _ => return addr
+            };
+            match var {
+                Variable::Bounded(a) => {
+                    addr = *a;
+                },
+                Variable::Unbounded() => return addr
+            };
+        }
+    }
 
 
     fn compile_query() {}
